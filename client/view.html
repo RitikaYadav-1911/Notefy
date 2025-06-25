@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<head>
+    <title>StudyBoard-All Notes</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>All Notes</h1>
+    <div class="controls">
+        <input type="text" id="searchInput" placeholder="Search by title,description or tags">
+        <select id="sortSelect" onchange="fetchNotes()">
+            <option value="latest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+            <option value="az">Title A-Z</option>
+            <option value="za">Title Z-A</option>
+        </select>
+        <button onclick="fetchNotes()">Search</button>
+    </div>
+    <div id="notesContainer" class="notes-grid"></div>
+    <script src="view.js"></script>
+</body>
+</html>
