@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Find User - StudyBoard</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #121212;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    h1 {
+      color: #bb86fc;
+      margin-bottom: 20px;
+    }
+
+    input, button {
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      margin: 10px;
+      font-size: 16px;
+    }
+
+    input {
+      width: 300px;
+    }
+
+    button {
+      background-color: #bb86fc;
+      color: black;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #9a66e4;
+    }
+
+    #error {
+      color: red;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔍 Find a User</h1>
+  <input type="email" id="emailInput" placeholder="Enter user email..." />
+  <button onclick="findUser()">Search</button>
+  <div id="error"></div>
+
+  <script>
+    async function findUser() {
+      const email = document.getElementById("emailInput").value.trim();
+      if (!email) {
+        document.getElementById("error").textContent = "Please enter an email.";
+        return;
+      }
+
+      try {
+        const res = await fetch(`http://localhost:5000/api/users/${encodeURIComponent(email)}`);
+        if (!res.ok) {
+          throw new Error("User not found");
+        }
+        const user = await res.json();
+        window.location.href = `view-user-dashboard.html?email=${encodeURIComponent(user.email)}`;
+      } catch (err) {
+        document.getElementById("error").textContent = err.message;
+      }
+    }
+  </script>
+</body>
+</html>
