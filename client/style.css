@@ -1,0 +1,165 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing: bordere-box;
+}
+
+body{
+    background:#121212;
+    font-family: 'Segeo UI',Tahoma,Geneva,Verdana,sans-serif;
+    color: #e0e0e0;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content: center;
+    padding: 40px;
+    animation: fadeIn 1s ease-in;
+}
+
+h1{
+    text-align:center;
+    margin-bottom:20px;
+    color:#bb86fc;
+    animation: dropDown 1s easeIn forwards;
+    width:100%;
+    max-width:500px;
+}
+
+form{
+    background: #1e1e1e;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(187,134,252,0.4);
+    width: 100%;
+    max-width: 500px;
+    animation: slideup 0.8s ease-out;
+
+}
+
+label{
+    display: block;
+    margin: 15px 0 5px;
+    color: #ffffff;
+}
+
+input[type="email"],
+input[type="text"],
+textarea,
+input[type="file"]{
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    background: #2a2a2a;
+    color: #fff;
+    font-size: 15px;
+    transition: border 0.3s ease;
+}
+
+input[type="email"]:focus,
+input[type="text"]:focus,
+textarea:focus,
+input[type="file"]:focus{
+    border-color: #bb86fc;
+    outline:none;
+}
+
+textarea{
+    resize:vertical;
+    min-height: 80px;
+}
+button{
+    margin-top: 20px;
+    width: 100%;
+    padding: 14px;
+    border:none;
+    border-radius: 8px;
+    background: #bb86fc;
+    color: #121212;
+    font-weight: bold;
+    font-size:16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+button:hover{
+    background:#9b68e4;
+}
+
+@keyframes fadeIn{
+    from{
+        opacity:0;
+    }
+    to{
+        opacity: 1;
+    }
+}
+
+@keyframes slideup{
+    from{
+        transform: translate(40px);
+        opacity: 0;
+    }
+    to{
+        transform: translate(0);
+        opacity:1;
+    }
+}
+
+@keyframes dropDown{
+    from{
+        transform: translateY(-30px);
+        opacity:0;
+    }
+    to{
+        transform: translateY(0);
+        opacity:1;
+
+    }
+}
+
+.notes-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px,1fr));
+    gap:20px;
+    margin-top:30px;
+    width:100%;
+}
+
+.note-card{
+    background: #1e1e1e;
+    border-radius:12px;
+    padding:20px;
+    box-shadow:0 0 8px rgba(187,134,252,0.3);
+    color:#e0e0e0;
+    transition: transform 0.3s ease;
+}
+
+.note-card:hover{
+    transform: translateY(-5px);
+}
+
+.note-card img{
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.note-preview{
+    max-width:100%;
+    height:auto;
+    border-radius:8px;
+    margin-bottom:10px;
+}
+
+.controls{
+    display:flex;
+    gap:10px;
+    margin: 20px 0;
+    flex-wrap:wrap;
+}
+
+.controls input, .controls select, .controls button{
+    padding: 8px;
+    border-radius:6px;
+    border: none;
+}
