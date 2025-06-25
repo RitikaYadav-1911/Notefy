@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>StudyBoard - Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap');
+
+    *{
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body{
+      font-family: 'Poppins', sans-serif;
+      background: #000;
+      color: white;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    canvas{
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    header{
+      width: 100%;
+      background: #bb86fc;
+      color: #121212;
+      padding: 12px 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 2;
+    }
+
+    header .left-section{
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+
+    header .left-section span{
+      font-weight: 900;
+      font-size: 25px;
+      color: black;
+      user-select: none;
+      font-family: Georgia,"Times New Roman", sans-serif;
+      text-shadow: 0 0 6px #bb86fcaa, 0 0 10px #bb86fccc;
+      letter-spacing: 1.2px;
+    }
+
+    .profile{
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .profile img{
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      cursor: pointer;
+      border: 2px solid #121212;
+      transition: border-color 0.3s;
+    }
+
+    .profile img:hover{
+      border-color: #bb86fc;
+    }
+
+
+    #homeBtn{
+      margin-left: 40px;
+      background-color: black;
+      border: 2px solid #bb86fc;
+      color: #bb86fc;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 15px;
+      transition: background 0.3s ease, color 0.3s ease;
+      user-select: none;
+    }
+
+    #homeBtn:hover{
+      background-color: #bb86fc;
+      color: black;
+    }
+
+    .options{
+      position: relative;
+    }
+
+    .options-menu{
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: #1a1a1a;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      min-width: 140px;
+      z-index: 10;
+    }
+
+    .options-menu a{
+      display: block;
+      padding: 6px 12px;
+      text-decoration: none;
+      color: white;
+      font-size: 14px;
+    }
+
+    .options-menu a:hover{
+      background: #333;
+    }
+
+    main{
+      flex: 1;
+      display: flex;
+      position: relative;
+      z-index: 1;
+      gap: 24px;
+      padding: 20px 30px;
+    }
+
+    .sidebar{
+      width: 240px;
+      background: #1a1a1a;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 0 20px #bb86fc33;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      color: #ccc;
+      user-select: none;
+    }
+
+    .sidebar h2{
+      font-weight: 700;
+      font-size: 20px;
+      color: #bb86fc;
+      margin-bottom: 10px;
+    }
+
+    .recommendation-item{
+      background: #2a2a2a;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 14px;
+      line-height: 1.3;
+      cursor: default;
+      box-shadow: inset 0 0 5px #bb86fc55;
+      transition: background 0.3s;
+    }
+
+    .recommendation-item:hover{
+      background: #3b1a92;
+    }
+
+    .note-buttons{
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .note-buttons button{
+      background: #bb86fc;
+      color: #121212;
+      font-weight: 600;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 15px;
+      transition: background 0.3s ease;
+    }
+
+    .note-buttons button:hover{
+      background: #9c6ade;
+    }
+
+    .content{
+      flex: 1;
+      background: #121212;
+      border-radius: 12px;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      color: #ddd;
+      overflow-y: auto;
+      box-shadow: 0 0 20px #bb86fc55;
+    }
+
+    section{
+      background: #1f1f1f;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: inset 0 0 10px #bb86fc44;
+      user-select: none;
+    }
+
+    section h3{
+      color: #bb86fc;
+      margin-bottom: 12px;
+      font-weight: 700;
+      font-size: 22px;
+    }
+
+    .editable-textarea{
+      width: 100%;
+      min-height: 80px;
+      background: #00000033;
+      border: none;
+      color: #ddd;
+      font-size: 16px;
+      border-radius: 8px;
+      padding: 12px;
+      resize: vertical;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .editable-textarea:focus{
+      outline: 2px solid #bb86fc;
+      background: #1a1a1a;
+      color: #fff;
+    }
+
+    .edit-btn,.save-btn{
+      background: #bb86fc;
+      border: none;
+      color: #121212;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.3s ease;
+      margin-top: 10px;
+      user-select: none;
+    }
+
+    .edit-btn:hover,.save-btn:hover{
+      background: #9c6ade;
+    }
+
+    .activity-list{
+      list-style: none;
+      max-height: 200px;
+      overflow-y: auto;
+      font-size: 14px;
+      color: #bbb;
+      padding-left: 10px;
+    }
+
+    .activity-list li{
+      margin-bottom: 6px;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="starCanvas"></canvas>
+
+  <header>
+    <div class="left-section">
+      <div class="profile" title="Change profile picture">
+        <img id="profilePic" src="logo.png" alt="Profile" />
+        <input type="file" id="profilePicInput" accept="image/*" style="display:none" />
+      </div>
+
+      <span>Welcome</span>
+
+
+      <button id="homeBtn" title="Go to Home" onclick="window.location.href='/client/home.html'">Home</button>
+    </div>
+
+    <div class="options">
+      <button onclick="toggleMenu()">☰</button>
+      <div class="options-menu" id="menu">
+        <a href="find-user.html">Find User</a>
+        <a href="#" onclick="logout()">Logout</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <aside class="sidebar">
+      <h2>📘 Smart Recommendations</h2>
+      <div id="recommendations">
+        <div class="recommendation-item">Review your notes on Calculus</div>
+        <div class="recommendation-item">Practice coding challenges</div>
+        <div class="recommendation-item">Prepare for upcoming Chemistry quiz</div>
+        <div class="recommendation-item">Schedule breaks to avoid burnout</div>
+        <div class="recommendation-item">Join study groups on History topics</div>
+      </div>
+
+      <div class="note-buttons">
+        <button onclick="window.location.href='upload.html'">Upload Notes</button>
+        <button onclick="window.location.href='view.html'">Fetch Notes</button>
+      </div>
+    </aside>
+
+    <section class="content">
+      <section id="todaysPlanSection">
+        <h3>📅 Today's Plan <button class="edit-btn" id="editPlanBtn">Edit</button></h3>
+        <textarea id="todaysPlan" class="editable-textarea" readonly>Write your study plan for today...</textarea>
+        <button class="save-btn" id="savePlanBtn" style="display:none;">Save</button>
+      </section>
+
+      <section id="announcementsSection">
+        <h3>📰 Announcements <button class="edit-btn" id="editAnnouncementBtn">Edit</button></h3>
+        <textarea id="announcements" class="editable-textarea" readonly>Welcome to StudyBoard! Keep pushing forward.</textarea>
+        <button class="save-btn" id="saveAnnouncementBtn" style="display:none;">Save</button>
+      </section>
+
+      <section id="weeklyActivitySection">
+        <h3>📈 Weekly Activity</h3>
+        <ul id="activityList" class="activity-list">
+          <li>No activities logged yet.</li>
+        </ul>
+      </section>
+    </section>
+  </main>
+ <script>
+
+
+window.onpageshow = function(event) {
+  if (event.persisted || performance.getEntriesByType("navigation")[0].type === "back_forward") {
+    window.location.reload();
+  }
+};
+
+
+  let userEmail = localStorage.getItem("userEmail");
+  if (!userEmail) {
+    alert("You must be logged in first!");
+    window.location.href = "login.html";
+  }
+
+  const storageKey = (key) => `${userEmail}_${key}`;
+
+  window.onload = () => {
+    const savedPic = localStorage.getItem(storageKey("profilePic"));
+    if (savedPic) {
+      const profilePicElem = document.getElementById("profilePic");
+      if (profilePicElem) profilePicElem.src = savedPic;
+    }
+
+    const plan = localStorage.getItem(storageKey("todaysPlan"));
+    if (plan) document.getElementById("todaysPlan").value = plan;
+
+    const ann = localStorage.getItem(storageKey("announcements"));
+    if (ann) document.getElementById("announcements").value = ann;
+
+    loadWeeklyActivity();
+  };
+
+  function toggleMenu() {
+    const menu = document.getElementById("menu");
+    menu.style.display = menu.style.display === "block" ? "none" : "block";
+  }
+
+  function logout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userEmail");
+    window.location.href = "login.html";
+  }
+
+  const profilePic = document.getElementById("profilePic");
+  const profilePicInput = document.getElementById("profilePicInput");
+
+  profilePic.addEventListener("click", () => profilePicInput.click());
+
+  profilePicInput.addEventListener("change", () => {
+    const file = profilePicInput.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        profilePic.src = e.target.result;
+        localStorage.setItem(storageKey("profilePic"), e.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  const editPlanBtn = document.getElementById("editPlanBtn");
+  const savePlanBtn = document.getElementById("savePlanBtn");
+  const todaysPlan = document.getElementById("todaysPlan");
+
+  editPlanBtn.addEventListener("click", () => {
+    todaysPlan.removeAttribute("readonly");
+    todaysPlan.focus();
+    editPlanBtn.style.display = "none";
+    savePlanBtn.style.display = "inline-block";
+  });
+
+  savePlanBtn.addEventListener("click", () => {
+    todaysPlan.setAttribute("readonly", true);
+    localStorage.setItem(storageKey("todaysPlan"), todaysPlan.value.trim());
+    editPlanBtn.style.display = "inline-block";
+    savePlanBtn.style.display = "none";
+    alert("Today's Plan saved!");
+  });
+
+  const editAnnouncementBtn = document.getElementById("editAnnouncementBtn");
+  const saveAnnouncementBtn = document.getElementById("saveAnnouncementBtn");
+  const announcements = document.getElementById("announcements");
+
+  editAnnouncementBtn.addEventListener("click", () => {
+    announcements.removeAttribute("readonly");
+    announcements.focus();
+    editAnnouncementBtn.style.display = "none";
+    saveAnnouncementBtn.style.display = "inline-block";
+  });
+
+  saveAnnouncementBtn.addEventListener("click", () => {
+    announcements.setAttribute("readonly", true);
+    localStorage.setItem(storageKey("announcements"), announcements.value.trim());
+    editAnnouncementBtn.style.display = "inline-block";
+    saveAnnouncementBtn.style.display = "none";
+    alert("Announcements saved!");
+  });
+
+  function loadWeeklyActivity() {
+    const activityList = document.getElementById("activityList");
+    const activities = JSON.parse(localStorage.getItem(storageKey("weeklyActivity"))) || [];
+    activityList.innerHTML =
+      activities.length
+        ? activities.map((act) => `<li>${act}</li>`).join("")
+        : "<li>No activities logged yet.</li>";
+  }
+
+  const canvas = document.getElementById("starCanvas");
+  const ctx = canvas.getContext("2d");
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
+  resizeCanvas();
+  window.addEventListener("resize", resizeCanvas);
+
+  const stars = Array.from({ length: 120 }, () => ({
+    x: Math.random() * window.innerWidth,
+    y: Math.random() * window.innerHeight,
+    r: Math.random() * 1.5 + 0.5,
+    speed: Math.random() * 0.7 + 0.2,
+  }));
+
+  function drawStars() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#bb86fc";
+    stars.forEach((star) => {
+      ctx.beginPath();
+      ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
+      ctx.fill();
+      star.y += star.speed;
+      if (star.y > canvas.height) {
+        star.y = 0;
+        star.x = Math.random() * canvas.width;
+      }
+    });
+    requestAnimationFrame(drawStars);
+  }
+
+  drawStars();
+</script>
+
+</body>
+</html>
